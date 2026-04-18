@@ -34,11 +34,10 @@ public class JournalEntryControllerV2 {
         return new ResponseEntity<>(entries, HttpStatus.OK);
     }
 
-    @PostMapping("id/{userName}")
+    @PostMapping("{userName}")
     public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry, @PathVariable String userName) {
 
         try{
-
             journalEntryService.saveEntry(myEntry, userName);
             return new ResponseEntity<>(myEntry,HttpStatus.CREATED);
         }

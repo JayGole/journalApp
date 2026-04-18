@@ -7,6 +7,7 @@ import net.engineeringdigest.journalApp.repository.JournalEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,6 +38,7 @@ public class JournalEntryService {
 
     }
     //overloaded method especially made for PutMapping as there is no need of username
+    @Transactional
     public void saveEntry(JournalEntry journalEntry){
         try{
 
@@ -62,6 +64,6 @@ public class JournalEntryService {
         User user = userService.findByUserName(userName); //fetched the user object if present
         user.getJournalEntries().removeIf(x -> x.getId().equals(id)); //removed the reference of journal entry stored in the journal entries field list
         userService.saveEntry(user); //deleted the journal entry from journey_entries collection
-        journalEntryRepository.deleteById(id);
+        journalEntryRepository.deleteById(id); // we first delete the reference stored in the list of jouurnal entries in users, then in this step we delete the actual journal entry from journla_entries collection
     }
 }
