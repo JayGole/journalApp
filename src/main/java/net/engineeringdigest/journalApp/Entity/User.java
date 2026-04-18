@@ -1,5 +1,6 @@
 package net.engineeringdigest.journalApp.Entity;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -15,8 +16,7 @@ import java.util.List;
 
 //POJO - plain old java object
 @Document(collection="users")
-@Getter
-@Setter
+@Data
 public class User {
 
     @Id
@@ -30,7 +30,7 @@ public class User {
     private String password;
 
     @DBRef //user reference rkhega of fields(documents ) in journal_entries collection
-    private List<String> journalEntries = new ArrayList<>();
+    private List<JournalEntry> journalEntries = new ArrayList<>();
 
 
 }
