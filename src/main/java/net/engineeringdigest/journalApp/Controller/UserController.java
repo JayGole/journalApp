@@ -3,12 +3,15 @@ package net.engineeringdigest.journalApp.Controller;
 
 import net.engineeringdigest.journalApp.Entity.JournalEntry;
 import net.engineeringdigest.journalApp.Entity.User;
+import net.engineeringdigest.journalApp.repository.UserRepository;
 import net.engineeringdigest.journalApp.service.JournalEntryService;
 import net.engineeringdigest.journalApp.service.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +24,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
+
+    //shifted the getAll users method to admin as every user should not be able to see users list
+    /*@GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
 
         List<User> userList = userService.getAll();
@@ -31,18 +36,9 @@ public class UserController {
         }
         return new ResponseEntity<>(userList, HttpStatus.OK);
 
-    }
+    }*/
 
-    @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody User user){
-        try{
-            userService.saveEntry(user);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }
-        catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
+
 
     @GetMapping("/id/{id}")
     public ResponseEntity<?> getUserById(@PathVariable ObjectId id){
@@ -53,26 +49,28 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/id/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable ObjectId id){
-        Optional<User> user = userService.findById(id);
-        if(user.isPresent()){
-            userService.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @Autowired
+    private UserRepository userRepository;
+    @DeleteMapping
+    public ResponseEntity<?> deleteByUserName(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userRepository.deleteByUserName(authentication.getName());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{userName}")
-    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable String userName){
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody User user){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
         User userInDb = userService.findByUserName(userName);
-        if(userInDb != null){
-            userInDb.setUserName(user.getUserName());
-            userInDb.setPassword(user.getPassword());
-            userService.saveEntry(userInDb);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(user,HttpStatus.NO_CONTENT);
+
+        userInDb.setUserName(user.getUserName());
+        userInDb.setPassword(user.getPassword());
+        userService.saveNewUser(userInDb);
+        return new ResponseEntity<>(HttpStatus.OK);
+
+
     }
 
 }

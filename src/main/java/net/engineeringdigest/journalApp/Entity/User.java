@@ -32,5 +32,7 @@ public class User {
     @DBRef //user reference rkhega of fields(documents ) in journal_entries collection
     private List<JournalEntry> journalEntries = new ArrayList<>();
 
+    private List<String> roles;
+
 
 }
