@@ -25,7 +25,7 @@ public class UserController {
     private UserService userService;
 
 
-    //shifted the getAll users method to admin as every user should not be able to see users list
+    //will shift the getAll users method to admin as every user should not be able to see users list
     /*@GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
 
