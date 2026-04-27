@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @EnableTransactionManagement //searches for all methods containing transactional annotation and stores them in a container. (atomicity and isolation)
@@ -24,3 +25,5 @@ public class JournalApplication {
     }
 
 }
+
+

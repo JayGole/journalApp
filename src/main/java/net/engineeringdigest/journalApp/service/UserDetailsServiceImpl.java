@@ -1,3 +1,6 @@
+//this class fetches user details to check for authentication from database
+
+
 package net.engineeringdigest.journalApp.service;
 
 import net.engineeringdigest.journalApp.Entity.User;
