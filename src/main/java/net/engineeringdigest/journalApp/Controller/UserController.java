@@ -39,8 +39,20 @@ public class UserController {
     @Autowired // injects the UserRepository bean automatically so database operations can be performed without manually creating its object
     private UserRepository userRepository;
 
-    @DeleteMapping // maps this method to handle HTTP DELETE requests for deleting resources
-    public ResponseEntity<?> deleteByUserName() {
+    //will shift the getAll users method to admin as every user should not be able to see users list
+    /*@GetMapping
+    public ResponseEntity<List<User>> getAllUsers(){
+
+        List<User> userList = userService.getAll();
+
+        if(userList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+
+    }*/
+
+
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();// authentication object is like a visitor pass given by guard(spring security) after user authentication
         // fetches the currently logged-in user's authentication details from Spring Security context
