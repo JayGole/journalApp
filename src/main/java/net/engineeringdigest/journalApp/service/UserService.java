@@ -32,6 +32,14 @@ public class UserService {
 
     }
 
+    public void saveAdmin(User user){
+        //used for creating a new admin. can be created by admin only
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("USER","ADMIN"));
+        userRepository.save(user);
+
+    }
+
     public void saveUser(User user){
         //used for updating a user
         userRepository.save(user);
