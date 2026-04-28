@@ -30,6 +30,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {//Allows me to
         http
                 .authorizeRequests()//start authorising requests
                     .antMatchers("/journal/**","/user/**").authenticated() //any endpoint containing /journal/** is authenticated
+                    .antMatchers("/admin/**").hasRole("ADMIN") //admin wali jo api endpoints hai woh un users se authenticate hongi, jinka role = "admin"
                     .anyRequest().permitAll() //any other request should be permissible without authentication
                 .and() // phir se http pe chale gaye
                 .httpBasic(); //without .httpBasic spring will forward user to default login page
